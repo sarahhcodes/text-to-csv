@@ -1,21 +1,12 @@
 # A utility to transform a text file of vocabulary words into a csv file.
 
 # TO DO:
-# add all the flags, including:
-###### number of columns DONE
-###### labels for columns DONE
-###### text file DONE
-###### character used as seperator (':', etc) DONE
-###### save as: "USERINPUT.csv" DONE
-# make column names in make_list() generic DONE
-# function for checking formatting of text file --> makes sure that file EXISTS and that it's formatted as per user's request
-###### runs before other functions & offers suggestions
 # error handling
-# pytest
 # docstrings for all functions
 
 import argparse
 import csv
+import sys
 
 def main():
     parser = argparse.ArgumentParser(description="Convert text files to CSV files")
@@ -35,20 +26,24 @@ def make_list(txt, columns, split_on):
     
     :param txt: Name of text file
     :type txt: str
-    :raise ValueError: If no such file exists
+    :raise FileNotFoundError: If no such file exists
     :return: A list of dictionaries for each line in file
     :rtype: list
     """
     words = []
-    # add exception for ValueError - no such file found
-    with open(txt) as file:
-        for line in file:
-            if ":" in line:
-                row = line.strip().split(split_on)
-                dictionary = {}
-                for i in range(len(columns)):
-                    dictionary[columns[i]] = row[i].strip()
-                words.append(dictionary)
+    
+    try:
+        with open(txt) as file:
+            for line in file:
+                if ":" in line:
+                    row = line.strip().split(split_on)
+                    dictionary = {}
+                    for i in range(len(columns)):
+                        dictionary[columns[i]] = row[i].strip()
+                    words.append(dictionary)
+
+    except FileNotFoundError:
+        sys.exit("File not found.")
 
     return words # returns list of words
 
