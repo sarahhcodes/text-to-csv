@@ -18,6 +18,7 @@ def main():
 
     list = make_list(args.input, args.columns, args.split_on)
     make_file(list, args.output, args.columns)
+    print("File created")
 
 
 def make_list(txt, columns, split_on):
@@ -50,7 +51,7 @@ def make_list(txt, columns, split_on):
 
 def make_file(list, export_name, columns):
     """Converts list to CSV file"""
-    with open(export_name, "a") as file:
+    with open(export_name, "w") as file:
         writer = csv.DictWriter(file, fieldnames=columns)
         writer.writeheader()
         writer.writerows(list)
